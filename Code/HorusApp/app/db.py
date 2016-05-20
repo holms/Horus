@@ -2,7 +2,10 @@ import os
 from os import path
 from werkzeug import secure_filename
 import json
-from StringIO import StringIO
+try:
+        from StringIO import StringIO
+except ImportError:
+        from io import StringIO
 
 import subprocess
 
@@ -19,7 +22,7 @@ class ShotDB():
   def set_shot(self, shotname, data):
     secure_shotname = secure_filename(shotname)
     shotpath = path.join(self._d, secure_shotname)
-    
+
     if not os.path.isdir(shotpath):
       os.makedirs(shotpath)
     revisions = [ s for s in os.listdir(shotpath) if path.isfile(path.join(shotpath,s)) and ".json" in s ]
@@ -27,9 +30,9 @@ class ShotDB():
     shotrevision = 1
     if revisions:
       shotrevision = int(os.path.splitext(revisions[-1])[0]) + 1
-      print shotrevision
+      print(shotrevision)
     filename = "%.4d.json" % shotrevision
-    print "Saving shot %s revision %s as %s" % (shotname, filename, secure_shotname)
+    print("Saving shot %s revision %s as %s" % (shotname, filename, secure_shotname))
 
     gitversion = subprocess.check_output(["git", "describe", "--dirty"])
     decoded = json.load(StringIO(data))
@@ -46,7 +49,7 @@ class ShotDB():
   def get_shot(self, shotname, rev=-1):
     secure_shotname = secure_filename(shotname)
     shotpath = path.join(self._d, secure_shotname)
-    print shotpath
+    print(shotpath)
 
     if not os.path.isdir(shotpath):
       return False
@@ -54,7 +57,7 @@ class ShotDB():
     revisions = [ s for s in os.listdir(shotpath) if path.isfile(path.join(shotpath,s)) and ".json" in s ]
     revisions.sort()
     if not revisions:
-      return False    
+      return False
 
     data = None
     filename = revisions[rev]
@@ -79,5 +82,5 @@ class ShotDB():
     return False
 
   def test(self):
-    print self._d    
+    print(self._d)
 
