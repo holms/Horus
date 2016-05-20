@@ -7,7 +7,7 @@ import sympy.physics
 import sympy.physics.mechanics
 import sympy.physics.mechanics.functions
 import sympy.utilities.autowrap
-
+from numpy import *
 
 
 def collect_into_dict_include_zero_and_constant_terms(expr, syms):

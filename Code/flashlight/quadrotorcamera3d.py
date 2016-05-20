@@ -2,19 +2,17 @@ from pylab import *
 
 import sklearn
 import sklearn.preprocessing
-import transformations
-import linalgutils
-import trigutils
+from flashlight import transformations
+from flashlight import linalgutils
+from flashlight import trigutils
 import sympy
 import sympy.matrices
 import sympy.physics
 import sympy.physics.mechanics
 import sympy.physics.mechanics.functions
-import trigutils
-import sympyutils
-import pathutils
-
-
+from flashlight import sympyutils
+from flashlight import pathutils
+from numpy import *
 
 m      = 1.0                          # mass
 g      = 9.8                          # gravity
@@ -28,10 +26,9 @@ f_external_world = f_gravity_world
 construct_sympy_expressions = False
 
 
-
 if construct_sympy_expressions:
 
-    print "Constructing sympy symbols..."
+    print("Constructing sympy symbols...")
 
     t_expr             = sympy.Symbol("t")
     theta_expr         = sympy.physics.mechanics.dynamicsymbols("theta")
@@ -42,7 +39,7 @@ if construct_sympy_expressions:
     psi_dot_expr       = psi_expr.diff(t_expr)
     phi_dot_expr       = phi_expr.diff(t_expr)
 
-    print "Constructing sympy expressions..."
+    print("Constructing sympy expressions...")
 
     R_z_theta_expr = sympyutils.construct_axis_aligned_rotation_matrix_right_handed(theta_expr,0)
     R_y_psi_expr   = sympyutils.construct_axis_aligned_rotation_matrix_right_handed(psi_expr,1)
@@ -65,12 +62,12 @@ if construct_sympy_expressions:
 
     syms = [ theta_expr, psi_expr, phi_expr, theta_dot_expr, psi_dot_expr, phi_dot_expr ]
 
-    print "Dummifying sympy expressions..."
+    print("Dummifying sympy expressions...")
 
     A_expr_dummy,     A_expr_dummy_syms     = sympyutils.dummify( A_expr,     syms )
     A_dot_expr_dummy, A_dot_expr_dummy_syms = sympyutils.dummify( A_dot_expr, syms )
 
-    print "Saving sympy expressions..."
+    print( "Saving sympy expressions...")
 
     current_source_file_path = pathutils.get_current_source_file_path()
 
@@ -82,7 +79,7 @@ if construct_sympy_expressions:
 
 else:
 
-    print "Loading sympy expressions..."
+    print("Loading sympy expressions...")
 
     current_source_file_path = pathutils.get_current_source_file_path()
 
@@ -92,12 +89,12 @@ else:
     with open(current_source_file_path+"/data/sympy/quadrotorcamera3d_A_expr_dummy_syms.dat",     "r") as f: A_expr_dummy_syms     = array(sympy.sympify(f.read())).squeeze()
     with open(current_source_file_path+"/data/sympy/quadrotorcamera3d_A_dot_expr_dummy_syms.dat", "r") as f: A_dot_expr_dummy_syms = array(sympy.sympify(f.read())).squeeze()
 
-print "Compiling sympy functions..."
+print("Compiling sympy functions...")
 
 A_anon_funcs_ufuncify     = sympyutils.construct_matrix_anon_funcs_ufuncify(A_expr_dummy,     A_expr_dummy_syms)
 A_dot_anon_funcs_ufuncify = sympyutils.construct_matrix_anon_funcs_ufuncify(A_dot_expr_dummy, A_dot_expr_dummy_syms)
 
-print "Finished compiling sympy functions."
+print("Finished compiling sympy functions.")
 
 
 

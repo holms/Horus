@@ -4,10 +4,10 @@ import sklearn.metrics
 
 #Our libraries
 
-import pathutils
+from app import pathutils
 pathutils.add_relative_to_current_source_file_path_to_sys_path("../..")
 
-from coord_system import *
+from app.coord_system import *
 from flashlight.splineutils import *
 from flashlight.curveutils import *
 from flashlight.quadrotorcamera3d import *

@@ -1,5 +1,5 @@
 from flask import Flask
-import db
+from app import db
 
 # Global server variable 
 server = Flask(__name__)

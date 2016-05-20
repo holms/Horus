@@ -41,7 +41,7 @@ def edit_shot():
 
 @server.route('/api/get_keyframes.json', methods = ['POST'])
 def get_keyframes():
-  print request.get_json()
+  print(request.get_json())
   return jsonify(request.json)
 
 
@@ -403,7 +403,7 @@ def export_spline_to_quad_representation():
     "T_lookAt_ease" :T_lookAt_ease,
     "lastTime" :[lastTime]}
 
-  print export_data
+  print(export_data)
   headers = {'content-type': 'application/json'}
   r = requests.post("http://localhost:9000", data = jsonify(export_data), headers = headers);
   
